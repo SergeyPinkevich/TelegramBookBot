@@ -1,39 +1,25 @@
-# -*- coding: utf-8 -*-
+# coding: utf8
 
 import telebot
 import config
-import urllib.request
-from bs4 import BeautifulSoup
-
-
-def get_html(url):
-    response = urllib.request.urlopen(url)
-    return response.read()
-
-
-def parse(html):
-    soup = BeautifulSoup(html, "html.parser")
-    table = soup.find("table", class_="book")
-    tbody = table.find("tbody")
-
-    for tr in tbody.find_all('tr'):
-        print(tr)
-
+import LitRu
 
 bot = telebot.TeleBot(config.token)
 
 
 @bot.message_handler(commands=['search'])
 def handle_command(message):
-    bot.send_message(config.chat_id, "Please, enter the title or author")
+    bot.send_message(config.chat_id, "Пожалуйста, введите название книги или имя автора")
 
 
 @bot.message_handler(content_types=['text'])
 def handle_text(message):
-    query = message.text
-    query.replace(' ', '+')
-    print(query)
-    parse(get_html(config.URL + query))
+    query = str(message.text.replace(' ', '+'))
+    launch_parsing(query)
+
+
+def launch_parsing(query):
+    LitRu.main(query)
 
 
 if __name__ == '__main__':
