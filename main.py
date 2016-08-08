@@ -16,13 +16,20 @@ def handle_command(message):
 @bot.message_handler(content_types=['text'])
 def handle_text(message):
     query = str(message.text.replace(' ', '+'))
-    # bot.send_message(config.chat_id, launch_parsing(query))
+    books = launch_parsing(query)
+    bot.send_message(config.chat_id, print_books(books))
 
 
 def launch_parsing(query):
-    LitRu.main(query)
+    return LitRu.main(query)
     # Flibusta.main(query)
 
+
+def print_books(books):
+    result = "Найдено результатов: " + str(len(books)) + '\n\n'
+    for book in books:
+        result += ('Автор: ' + book.author + '\n' + 'Название: ' + book.title + '\n' + 'Скачать FB2: ' + book.link + '\n\n')
+    return result
 
 if __name__ == '__main__':
     launch_parsing("Гарри+Поттер")

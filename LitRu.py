@@ -15,23 +15,21 @@ def get_html(url):
 def parse(html):
     soup = BeautifulSoup(html, "html.parser")
     table = soup.find("table", class_="book")
-    result = ""
+    books = []
 
     for row in table.find_all("tr")[1:]:
         columns = row.find_all("td")
         author_and_title = columns[0].text
         rate = columns[2].text
+        link = columns[0]
+        print(link)
 
-        books = []
         if check_book_has_author(author_and_title) is True:
             book = create_book(author_and_title, rate)
             books.append(book)
 
-        books.sort(key=lambda b: b.rate)
-        for b in books:
-            print(b.author + '/' + b.title + '/' + str(b.rate))
-        # print_book(books)
-    return result
+    books.sort(key=lambda b: b.rate, reverse=True)
+    return books
 
 
 def check_book_has_author(string):
@@ -55,10 +53,5 @@ def create_book(name, rate):
     return book
 
 
-def print_book(books):
-    for book in books:
-        print(book.author + '/' + book.title + '/' + str(book.rate))
-
-
 def main(query):
-    parse(get_html(URL + query))
+    return parse(get_html(URL + query))
