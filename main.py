@@ -6,6 +6,7 @@ import LitRu
 import Flibusta
 
 bot = telebot.TeleBot(config.token)
+books = []
 
 
 @bot.message_handler(commands=['search'])
@@ -28,9 +29,10 @@ def launch_parsing(query):
 def print_books(books):
     result = "Найдено результатов: " + str(len(books)) + '\n\n'
     for book in books:
-        result += ('Автор: ' + book.author + '\n' + 'Название: ' + book.title + '\n' + 'Скачать FB2: ' + book.link + '\n\n')
-    return result
+        result += ('Автор: ' + book.author + '\n' + 'Название: ' + book.title + '\n' + 'Скачать FB2: ' + str(book.link) + '\n\n')
+    print(result)
 
 if __name__ == '__main__':
-    launch_parsing("Гарри+Поттер")
+    books = launch_parsing("Гарри+Поттер")
+    print_books(books)
     # bot.polling(none_stop=True)
