@@ -14,8 +14,14 @@ def handle_command(message):
     bot.send_message(config.chat_id, "Пожалуйста, введите название книги или имя автора")
 
 
+# @bot.message_handler(commands=['download'])
+# def handle_command(message):
+#     bot.send_document(config.chat_id)
+
+
 @bot.message_handler(content_types=['text'])
 def handle_text(message):
+    bot.send_message(config.chat_id, 'Выполняется поиск...')
     query = str(message.text.replace(' ', '+'))
     books = launch_parsing(query)
     bot.send_message(config.chat_id, print_books(books))
@@ -29,7 +35,7 @@ def launch_parsing(query):
 def print_books(books):
     result = "Найдено результатов: " + str(len(books)) + '\n\n'
     for book in books:
-        result += ('Автор: ' + book.author + '\n' + 'Название: ' + book.title + '\n' + 'Скачать FB2: ' + str(book.link) + '\n\n')
+        result += ('Автор: ' + book.author + '\n' + 'Название: ' + book.title + '\n' + 'Скачать FB2: ' + book.link + '\n\n')
     print(result)
 
 if __name__ == '__main__':
