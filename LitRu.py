@@ -12,6 +12,20 @@ def get_html(url):
     return response.text
 
 
+def find_link(html):
+    soup = BeautifulSoup(html, "html.parser")
+    table = soup.find("table")
+    for td in table.find_all("td"):
+        link = td.find("a")['href']
+    return link
+
+
+def get_book(link):
+    url = "http://litru.ru/?p=" + re.split('download_', link)[1]
+    download_link = find_link(get_html(url))
+    return download_link
+
+
 def parse(html):
     soup = BeautifulSoup(html, "html.parser")
     table = soup.find("table", class_="book")

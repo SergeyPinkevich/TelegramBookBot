@@ -16,7 +16,8 @@ def handle_command(message):
 
 @bot.message_handler(regexp='/download_\d+')
 def handle_command(message):
-    download_link = ""
+    download_link = LitRu.get_book(message.text)
+    bot.send_message(config.chat_id, download_link)
 
 
 @bot.message_handler(content_types=['text'])
