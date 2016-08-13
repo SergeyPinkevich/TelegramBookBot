@@ -20,6 +20,12 @@ def find_link(html):
     return link
 
 
+def remove_empty_book(books):
+    for book in books:
+        if book.link == "http://litru.ru/?p=397461":
+            books.remove(books[0])
+
+
 def get_book(link):
     url = "http://litru.ru/?p=" + re.split('download_', link)[1]
     download_link = find_link(get_html(url))
@@ -42,6 +48,7 @@ def parse(html):
             book = create_book(author_and_title, link, rate)
             books.append(book)
 
+    remove_empty_book(books)
     books.sort(key=lambda b: b.rate, reverse=True)
     return books
 
