@@ -35,25 +35,44 @@ def handle_text(message):
 
 
 def download_book(link, file_name):
-    print(link)
     archive = file_name + ".zip"
+    file_fb2 = file_name + ".fb2"
+    file_txt = file_name + ".txt"
+
     r = requests.get(link)
     with open(archive, "wb") as code:
         code.write(r.content)
     with zipfile.ZipFile(archive, "r") as zip_ref:
         zip_ref.extractall()
 
-    document = open(os.getcwd() + "/" + file_name + ".fb2", 'rb')
+    document = open_file(file_fb2)
+    document = open_file(file_txt)
+
     bot.send_document(config.chat_id, document)
     document.close()
 
     os.remove(os.getcwd() + "/" + archive)
-    os.remove(os.getcwd() + "/" + file_name + ".fb2")
+    remove_file(file_fb2)
+    remove_file(file_txt)
+
+
+def open_file(file_name):
+    try:
+        document = open(os.getcwd() + "/" + file_name, 'rb')
+        return document
+    except FileNotFoundError:
+        print("There is no such file: " + file_name)
+
+
+def remove_file(file_name):
+    try:
+        os.remove(os.getcwd() + "/" + file_name)
+    except FileNotFoundError:
+        print("There is no such file: " + file_name)
 
 
 def launch_parsing(query):
     return LitRu.main(query)
-    # Flibusta.main(query)
 
 
 def print_books(books):
