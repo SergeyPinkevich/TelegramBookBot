@@ -44,9 +44,11 @@ def download_book(link, file_name):
         code.write(r.content)
     with zipfile.ZipFile(archive, "r") as zip_ref:
         zip_ref.extractall()
+        r.close()
 
     document = open_file(file_fb2)
-    document = open_file(file_txt)
+    if document is None:
+        document = open_file(file_txt)
 
     bot.send_document(config.chat_id, document)
     document.close()
