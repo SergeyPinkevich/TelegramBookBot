@@ -49,7 +49,7 @@ def parse(html):
             books.append(book)
 
     remove_empty_book(books)
-    books.sort(key=lambda b: b.rate, reverse=True)
+    books.sort(key=lambda b: b.rate)
     return books
 
 
