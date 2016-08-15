@@ -14,6 +14,7 @@ books = []
 
 @bot.message_handler(commands=['start'])
 def handle_command(message):
+    config.chat_id = message.chat.id
     bot.send_message(config.chat_id, "Привет, " + message.from_user.first_name +
                      "! Чтобы начать, просто введите название книги или автора, и я начну поиск :)")
 
@@ -44,7 +45,6 @@ def download_book(link, file_name):
         code.write(r.content)
     with zipfile.ZipFile(archive, "r") as zip_ref:
         zip_ref.extractall()
-        r.close()
 
     document = open_file(file_fb2)
     if document is None:
@@ -82,7 +82,7 @@ def print_books(books):
         result = "Найдено результатов: " + str(len(books)) + '\n\n'
         for book in books:
             temp_link = re.split(r'\?p=', book.link)[1]
-            result += ('Автор: ' + book.author + '\n' + 'Название: ' + book.title + '\n' + 'Скачать FB2: /download_'
+            result += ('Автор: ' + book.author + '\n' + 'Название: ' + book.title + '\n' + 'Скачать: /download_'
                        + temp_link + '\n\n')
     else:
         result = "К сожалению, поиск не дал результатов. Попробуйте изменить поисковый запрос"
@@ -91,3 +91,4 @@ def print_books(books):
 
 if __name__ == '__main__':
     bot.polling(none_stop=True)
+
