@@ -21,7 +21,7 @@ def handle_command(message):
 
 @bot.message_handler(regexp='/download_\d+')
 def handle_command(message):
-    bot.send_message(config.chat_id, 'Скачиваю книгу с внешнего ресурса...')
+    bot.send_message(config.chat_id, u"Скачиваю книгу с внешнего ресурса...")
     download_link = LitRu.get_book(message.text)
     file_name = message.text.split('_')[1]
     download_book(download_link, file_name)
@@ -29,7 +29,7 @@ def handle_command(message):
 
 @bot.message_handler(content_types=['text'])
 def handle_text(message):
-    bot.send_message(config.chat_id, 'Выполняю поиск...')
+    bot.send_message(config.chat_id, u"Выполняю поиск...")
     query = str(message.text.replace(' ', '+'))
     books = launch_parsing(query)
     bot.send_message(config.chat_id, print_books(books))
