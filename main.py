@@ -15,8 +15,8 @@ books = []
 @bot.message_handler(commands=['start'])
 def handle_command(message):
     config.chat_id = message.chat.id
-    bot.send_message(config.chat_id, "Привет, " + message.from_user.first_name +
-                     "! Чтобы начать, просто введите название книги или автора, и я начну поиск :)")
+    bot.send_message(config.chat_id, u"Привет, " + message.from_user.first_name +
+                     u"! Чтобы начать, просто введите название книги или автора, и я начну поиск :)")
 
 
 @bot.message_handler(regexp='/download_\d+')
