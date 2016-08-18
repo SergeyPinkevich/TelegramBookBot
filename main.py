@@ -21,21 +21,23 @@ def handle_command(message):
 
 @bot.message_handler(regexp='/download_\d+')
 def handle_command(message):
+    config.chat_id = message.chat.id
     bot.send_message(config.chat_id, "Скачиваю книгу с внешнего ресурса...")
     download_link = LitRu.get_book(message.text)
     file_name = message.text.split('_')[1]
-    download_book(download_link, file_name)
+    download_book(download_link, file_name, config.chat_id)
 
 
 @bot.message_handler(content_types=['text'])
 def handle_text(message):
+    config.chat_id = message.chat.id
     bot.send_message(config.chat_id, "Выполняю поиск...")
     query = str(message.text.replace(' ', '+'))
     books = launch_parsing(query)
     bot.send_message(config.chat_id, print_books(books))
 
 
-def download_book(link, file_name):
+def download_book(link, file_name, chat):
     archive = file_name + ".zip"
     file_fb2 = file_name + ".fb2"
     file_txt = file_name + ".txt"
@@ -46,16 +48,18 @@ def download_book(link, file_name):
     with zipfile.ZipFile(archive, "r") as zip_ref:
         zip_ref.extractall()
 
-    document = open_file(file_fb2)
-    if document is None:
-        document = open_file(file_txt)
-
-    bot.send_document(config.chat_id, document)
-    document.close()
-
-    os.remove(os.getcwd() + "/" + archive)
-    remove_file(file_fb2)
-    remove_file(file_txt)
+    try:
+        document = open_file(file_fb2)
+        if document is None:
+            document = open_file(file_txt)
+        bot.send_document(chat, document)
+    except:
+        pass
+    finally:
+        document.close()
+        os.remove(os.getcwd() + "/" + archive)
+        remove_file(file_fb2)
+        remove_file(file_txt)
 
 
 def open_file(file_name):
